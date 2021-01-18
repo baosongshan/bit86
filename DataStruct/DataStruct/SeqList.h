@@ -1,8 +1,12 @@
+#ifndef _SEQLIST_H_
+#define _SEQLIST_H_
+
 #include"Sysutil.h"
 //顺序表
 
 #define ElemType int
 #define SEQLIST_DEFAULT_SIZE 8
+#define SEQLIST_INC_SIZE 4
 
 //定义顺序表的数据结构
 typedef struct SeqList
@@ -30,12 +34,42 @@ void SeqListSort(SeqList *pst);
 void SeqListDeleteByVal(SeqList *pst, ElemType key);
 void SeqListDeleteByPos(SeqList *pst, int pos);
 
+void SeqListReverse(SeqList *pst);
+void SeqListInsertByVal(SeqList *pst, ElemType x);
+void SeqListInsertByPos(SeqList *pst, int pos, ElemType x);
+int SeqListFindByBinary(SeqList *pst, ElemType key);
+void SeqListRemoveAll(SeqList *pst, ElemType key);
+
 ////////////////////////////////////////////////////////////
 
 bool IsFull(SeqList *pst)
 {return pst->size >= pst->capacity;}
 bool IsEmpty(SeqList *pst)
 {return pst->size == 0;}
+
+//下划线代表这个函数只能是内部函数
+bool _Inc(SeqList *pst)
+{
+	//申请新空间
+	//ElemType *new_base = (ElemType*)malloc(sizeof(ElemType)*(pst->capacity+SEQLIST_INC_SIZE));
+	ElemType *new_base = (ElemType*)malloc(sizeof(ElemType)*(pst->capacity * 2));
+	if(new_base == NULL)
+	{
+		printf("扩容失败.\n");
+		return false;
+	}
+	//拷贝数据
+	memcpy(new_base, pst->base, sizeof(ElemType)*pst->capacity);
+
+	//释放旧空间
+	free(pst->base);
+
+	//更改base的指向
+	pst->base = new_base;
+	pst->capacity += SEQLIST_INC_SIZE;
+	return true;
+}
+
 
 void SeqListInit(SeqList *pst)
 {
@@ -51,7 +85,7 @@ void SeqListPushBack(SeqList *pst, ElemType x)
 {
 	assert(pst);
 	//判满
-	if(IsFull(pst))
+	if(IsFull(pst) && !_Inc(pst))
 	{
 		printf("顺序表已满，%d 不能尾部插入.\n", x);
 		return;
@@ -63,7 +97,7 @@ void SeqListPushFront(SeqList *pst, ElemType x)
 {
 	assert(pst);
 	//判满
-	if(IsFull(pst))
+	if(IsFull(pst) && !_Inc(pst))
 	{
 		printf("顺序表已满，%d 不能头部插入.\n", x);
 		return;
@@ -180,3 +214,124 @@ void SeqListDeleteByPos(SeqList *pst, int pos)
 		pst->base[i] = pst->base[i+1];
 	pst->size--;
 }
+
+void SeqListReverse(SeqList *pst)
+{
+	assert(pst);
+	int start = 0, end = pst->size-1;
+	while(start < end)
+	{
+		ElemType tmp = pst->base[start];
+		pst->base[start] = pst->base[end];
+		pst->base[end] = tmp;
+
+		start++;
+		end--;
+	}
+}
+
+void SeqListInsertByVal(SeqList *pst, ElemType x)
+{
+	//插入之前要保证数据有序
+	assert(pst);
+	if(IsFull(pst) && !_Inc(pst))
+	{
+		printf("顺序表已满，%d 不能按值插入.\n", x);
+		return;
+	}
+
+	//寻找位置插入
+	int pos = 0;
+	while(pos<pst->size && x>pst->base[pos])
+		pos++;
+
+	for(int i=pst->size; i>pos; --i)
+		pst->base[i] = pst->base[i-1];
+
+	pst->base[pos] = x;
+	pst->size++;
+}
+
+void SeqListInsertByPos(SeqList *pst, int pos, ElemType x)
+{
+	assert(pst);
+	if(IsFull(pst) && !_Inc(pst))
+	{
+		printf("顺序表已满，%d 不能按位置插入.\n", x);
+		return;
+	}
+	if(pos<0 || pos>pst->size)
+	{
+		printf("插入的位置非法，%d 不能按位置插入.\n", x);
+		return;
+	}
+
+	for(int i=pst->size; i>pos; --i)
+	{
+		pst->base[i] = pst->base[i-1];
+	}
+	pst->base[pos] = x;
+	pst->size++;
+}
+
+int SeqListFindByBinary(SeqList *pst, ElemType key)
+{
+	assert(pst);
+	SeqListSort(pst); //先保证查找的数据有序
+
+	int low = 0, high = pst->size-1, mid;
+	while(low <= high)
+	{
+		mid = (low + high) / 2;
+		if(key == pst->base[mid])
+			return mid;
+		else if(key < pst->base[mid])
+			high = mid - 1;
+		else 
+			low = mid + 1;
+	}
+	return -1;
+}
+
+void SeqListRemoveAll(SeqList *pst, ElemType key)
+{
+	assert(pst);
+	int index;
+	do
+	{
+		index = SeqListFind(pst, key);
+		if(index == -1)
+			break;
+		SeqListDeleteByPos(pst, index);
+	}while(1);
+}
+
+#endif /* _SEQLIST_H_ */
+
+/*
+bool _Inc(SeqList *pst)
+{
+	ElemType *new_base = (ElemType*)realloc(pst->base, sizeof(ElemType)*(pst->capacity + SEQLIST_INC_SIZE));
+	if(new_base == NULL)
+	{
+		printf("扩容失败.\n");
+		return false;
+	}
+	pst->base = new_base;
+	pst->capacity += SEQLIST_INC_SIZE;
+	return true;
+}
+
+void SeqListRemoveAll(SeqList *pst, ElemType key)
+{
+	assert(pst);
+	int index;
+	do
+	{
+		index = SeqListFind(pst, key);
+		if(index == -1)
+			break;
+		SeqListDeleteByPos(pst, index);
+	}while(1);
+}
+*/

@@ -79,6 +79,7 @@
     <ClCompile Include="TestMain.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="List.h" />
     <ClInclude Include="SeqList.h" />
     <ClInclude Include="Sysutil.h" />
   </ItemGroup>
