@@ -2,6 +2,96 @@
 #include<assert.h>
 #include<vld.h>  //检测是否有内存泄漏 F5
 
+
+typedef struct ListNode
+{
+	int data;
+	struct ListNode *next;
+}ListNode;
+
+typedef ListNode* List;
+
+void InitList(List *head)
+{
+	//申请头结点
+	*head = (ListNode*)malloc(sizeof(ListNode));
+	(*head)->next = NULL;
+}
+
+void CreateList_Head(List *head)
+{
+	for(int i=1; i<=10; ++i)
+	{
+		ListNode *s = (ListNode*)malloc(sizeof(ListNode)); //申请节点
+		assert(s != NULL);
+		s->data = i;
+
+		//头部插入节点
+		s->next = (*head)->next;
+		(*head)->next = s;
+	}
+}
+
+void ShowList(List head)
+{
+	ListNode *p = head->next;
+	while(p != NULL)
+	{
+		printf("%d-->", p->data);
+		p = p->next;
+	}
+	printf("Over.\n");
+}
+
+void main()
+{
+	List mylist;
+	InitList(&mylist);
+	CreateList_Head(&mylist);
+	ShowList(mylist);
+}
+
+/*
+void InitList(List *head)
+{
+	*head = NULL;
+}
+
+void CreateList_Head(List *head)
+{
+	for(int i=1; i<=10; ++i)
+	{
+		ListNode *s = (ListNode*)malloc(sizeof(ListNode)); //申请节点
+		assert(s != NULL);
+		s->data = i;
+
+		//头部插入节点
+		s->next = *head;
+		*head = s;
+	}
+}
+
+void ShowList(List head)
+{
+	ListNode *p = head;
+	while(p != NULL)
+	{
+		printf("%d-->", p->data);
+		p = p->next;
+	}
+	printf("Over.\n");
+}
+
+void main()
+{
+	List mylist;
+	InitList(&mylist);
+	CreateList_Head(&mylist);
+	ShowList(mylist);
+}
+
+
+/*
 void fun(int a, int b, int *v)
 {
 	*v = a + b;
