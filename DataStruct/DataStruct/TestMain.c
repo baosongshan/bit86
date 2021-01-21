@@ -4,13 +4,13 @@
 int main()
 {
 	
-	SList mylist;
-	SListInit(&mylist);
+	DCList mylist;
+	DCListInit(&mylist);
 
 	ElemType item, key;
 	int pos;
 
-	SListNode *p;
+	DCListNode *p;
 
 	int select = 1;
 	while(select)
@@ -20,12 +20,12 @@ int main()
 		printf("* [3] show_list        [0] quit_system     *\n");
 		printf("* [4] pop_back         [5] pop_front       *\n");
 		printf("* [6] length           [*7] capacity       *\n");
-		printf("* [8] insert_val       [*9] insert_pos      *\n");
-		printf("* [10] delete_val      [*11] delete_pos     *\n");
+		printf("* [8] insert_val       [*9] insert_pos     *\n");
+		printf("* [10] delete_val      [*11] delete_pos    *\n");
 		printf("* [12] find            [13] sort           *\n");
 		printf("* [14] reverse         [15] remove_all     *\n");
 		printf("* [16] clear           [*17] destroy       *\n");
-		printf("* [*18] find_binary                         *\n");
+		printf("* [*18] find_binary                        *\n");
 		printf("********************************************\n");
 		printf("请选择:>");
 		scanf("%d", &select);
@@ -34,24 +34,24 @@ int main()
 		case 1:
 			printf("请输入要插入的数据(以-1结束):>");
 			while(scanf("%d", &item), item!=-1)  //逗号表达式
-				SListPushBack(&mylist, item);
+				DCListPushBack(&mylist, item);
 			break;
 		case 2:
 			printf("请输入要插入的数据(以-1结束):>");
 			while(scanf("%d", &item), item!=-1)  //逗号表达式
-				SListPushFront(&mylist, item); 
+				DCListPushFront(&mylist, item); 
 			break;
 		case 3:
-			SListShow(&mylist);
+			DCListShow(&mylist);
 			break;
 		case 4:
-			SListPopBack(&mylist);
+			DCListPopBack(&mylist);
 			break;
 		case 5:
-			SListPopFront(&mylist);
+			DCListPopFront(&mylist);
 			break;
 		case 6:
-			printf("表长为:>%d\n", SListLength(&mylist));
+			printf("表长为:>%d\n", DCListLength(&mylist));
 			break;
 		case 7:
 			//printf("表的容量为:>%d\n", SeqListCapacity(&mylist));
@@ -59,7 +59,7 @@ int main()
 		case 8:
 			printf("请输入要插入的值:>");
 			scanf("%d", &item);
-			SListInsertByVal(&mylist, item);
+			DCListInsertByVal(&mylist, item);
 			break;
 		case 9:
 			printf("请输入要插入的位置:>");
@@ -71,7 +71,7 @@ int main()
 		case 10:
 			printf("请输入要删除的值:>");
 			scanf("%d", &key);
-			SListDeleteByVal(&mylist, key);
+			DCListDeleteByVal(&mylist, key);
 			break;
 		case 11:
 			printf("请输入要删除的位置:>");
@@ -81,25 +81,25 @@ int main()
 		case 12:
 			printf("请输入要查找的值:>");
 			scanf("%d", &key);
-			p = SeqListFind(&mylist, key);
+			p = DCListFind(&mylist, key);
 			if(p == NULL)
 				printf("要查找的值%d不存在.\n", key);
 			else
 				printf("要查找的值%d存在.\n",key);
 			break;
 		case 13:
-			//SeqListSort(&mylist);
+			//SListSort(&mylist);
 			break;
 		case 14:
-			SListReverse(&mylist);
+			DCListReverse(&mylist);
 			break;
 		case 15:
 			printf("请输入要删除的值:>");
 			scanf("%d", &key);
-			//SeqListRemoveAll(&mylist, key);
+			//SListRemoveAll(&mylist, key);
 			break;
 		case 16:
-			SListClear(&mylist);
+			DCListClear(&mylist);
 			break;
 		case 18:
 			printf("请输入要查找的值:>");
@@ -115,7 +115,7 @@ int main()
 		system("cls");
 	}
 
-	SListDestroy(&mylist);
+	DCListDestroy(&mylist);
 
 	return 0;
 }
