@@ -346,6 +346,64 @@ void SListRemoveAll(SList *plist, ElemType key)
 	}
 }
 */
+//////////////////////////////////////////////////////////////////////////////////
+//单循环链表 --> 自行完成
+typedef struct SCListNode
+{
+	ElemType data;
+	struct SCListNode *next;
+}SCListNode;
+
+typedef struct SCList
+{
+	SCListNode *head;
+}SCList;
+void SCListInit(SCList *plist);
+void SCListPushBack(SCList *plist, ElemType x);
+void SCListPushFront(SCList *plist, ElemType x);
+void SCListPopBack(SCList *plist);
+void SCListPopFront(SCList *plist);
+void SCListShow(SCList *plist);
+
+int SCListLength(SCList *plist);
+SCListNode* SCListFind(SCList *plist, ElemType key);
+void SCListClear(SCList *plist);
+void SCListDestroy(SCList *plist);
+
+void SCListDeleteByVal(SCList *plist, ElemType key);
+void SCListInsertByVal(SCList *plist, ElemType x);
+void SCListReverse(SCList *plist);
+
+void SCListSort(SCList *plist);
+void SCListRemoveAll(SCList *plist, ElemType key);
+
+/////////////////////////////////////////////////////////////////////////////////////
+//双向链表 -->自行完成
+typedef struct DListNode
+{
+	ElemType data;
+	struct DListNode *prev;
+	struct DListNode *next;
+}DListNode;
+
+typedef struct DList
+{
+	DListNode *head;
+}DList;
+
+void DListInit(DList *plist);
+void DListPushBack(DList *plist, ElemType x);
+void DListPushFront(DList *plist, ElemType x);
+void DListShow(DList *plist);
+void DListPopBack(DList *plist);
+void DListPopFront(DList *plist);
+size_t DListLength(DList *plist);
+void DListClear(DList *plist);
+void DListDestroy(DList *plist);
+DListNode* DListFind(DList *plist, ElemType key);
+void DListDeleteByVal(DList *plist, ElemType key);
+void DListReverse(DList *plist);
+void DListInsertByVal(DList *plist, ElemType x);
 
 /////////////////////////////////////////////////////////////////////////////////////
 //带头结点双向循环链表
@@ -567,6 +625,8 @@ void DCListInsertByVal(DCList *plist, ElemType x)
 	s->prev->next = s;
 	s->next->prev = s;  
 }
+
+
 
 /////////////////////////////////////////////////////////////////////////////////
 /*
