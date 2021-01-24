@@ -29,5 +29,11 @@
     <ClInclude Include="List.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

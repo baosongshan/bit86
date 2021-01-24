@@ -80,7 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="SeqList.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="Sysutil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
