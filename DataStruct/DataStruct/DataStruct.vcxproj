@@ -84,6 +84,7 @@
     <ClInclude Include="SeqList.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Sysutil.h" />
+    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

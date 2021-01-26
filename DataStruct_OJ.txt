@@ -426,6 +426,73 @@ struct ListNode *detectCycle(struct ListNode *head)
 }
 
 12、https://leetcode-cn.com/problems/copy-list-with-random-pointer/description/ [链表的深度拷贝]
+/**
+ * Definition for a Node.
+ * struct Node {
+ *     int val;
+ *     struct Node *next;
+ *     struct Node *random;
+ * };
+ */
+
+//拷贝链表
+void copyList(struct Node *head)
+{
+    struct Node *p = head;
+    while(p != NULL)
+    {
+        struct Node *s = (struct Node*)malloc(sizeof(struct Node));
+        s->val = p->val;
+        s->random= NULL;
+        s->next = p->next;
+        p->next = s;
+
+        p = s->next;
+    }
+}
+
+//拷贝随机指针
+void copyRandom(struct Node *head)
+{
+    struct Node *p = head;
+    while(p != NULL)
+    {
+        struct Node *pclone = p->next;
+        if(p->random != NULL)
+            pclone->random = p->random->next;
+        
+        p = pclone->next;
+    }    
+}
+
+// 拆分链表
+struct Node* splitList(struct Node *head)
+{
+    struct Node *p = head;
+    struct Node *phead = p->next;
+
+    struct Node *pclone = phead;  //充当尾指针
+    while(p != NULL)
+    {
+        p->next = pclone->next;
+        p = p->next;
+        if(p != NULL)
+            pclone->next = p->next;
+        pclone = pclone->next;
+    }
+    return phead;
+}
+
+struct Node* copyRandomList(struct Node* head) 
+{
+    if(head == NULL)
+        return NULL;
+        
+    copyList(head);
+    copyRandom(head);
+    return splitList(head);
+}
+
 
 二、栈和队列
 1、https://leetcode-cn.com/problems/valid-parentheses/ [括号匹配]
@@ -683,7 +750,7 @@ MyStack* myStackCreate()
 /** Push element x onto stack. */
 void myStackPush(MyStack* obj, int x) 
 {
-    LinkQueueNode *pnoempty;
+    LinkQueue *pnoempty;
     if(LinkQueueEmpty(&(obj->q1)))
         pnoempty = &(obj->q2);
     else
@@ -694,7 +761,7 @@ void myStackPush(MyStack* obj, int x)
 /** Removes the element on top of the stack and returns that element. */
 int myStackPop(MyStack* obj) 
 {
-    LinkQueueNode *pnoempty, *pempty;
+    LinkQueue *pnoempty, *pempty;
     if(LinkQueueEmpty(&(obj->q1)))
     {
         pempty = &(obj->q1);
@@ -721,7 +788,7 @@ int myStackPop(MyStack* obj)
 /** Get the top element. */
 int myStackTop(MyStack* obj) 
 {
-    LinkQueueNode *pnoempty, *pempty;
+    LinkQueue *pnoempty, *pempty;
     if(LinkQueueEmpty(&(obj->q1)))
     {
         pempty = &(obj->q1);
