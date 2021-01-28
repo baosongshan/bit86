@@ -3,7 +3,8 @@
 
 #include"Sysutil.h"
 
-#define QueueElemType int
+struct BinTreeNode;
+#define QueueElemType struct BinTreeNode*
 
 //Á´¶ÓÁÐ
 typedef struct LinkQueueNode
@@ -25,6 +26,10 @@ void LinkQueueDe(LinkQueue *pq);
 void LinkQueueShow(LinkQueue *pq);
 QueueElemType LinkQueueBack(LinkQueue *pq);
 QueueElemType LinkQueueFront(LinkQueue *pq);
+bool LinkQueueEmpty(LinkQueue *pq)
+{
+	return pq->head == NULL;
+}
 
 void LinkQueueInit(LinkQueue *pq)
 {

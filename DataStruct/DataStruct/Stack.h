@@ -2,7 +2,9 @@
 #define _STACK_H_
 
 #include"Sysutil.h"
-#define StackElemType int
+
+struct BinTreeNode;
+#define StackElemType struct BinTreeNode*
 
 #define SEQSTACK_DEFAULT_SIZE 8
 
@@ -97,6 +99,10 @@ void LinkStackPush(LinkStack *pst, StackElemType x);
 void LinkStackPop(LinkStack *pst);
 StackElemType LinkStackTop(LinkStack *pst);
 void LinkStackShow(LinkStack *pst);
+bool LinkStackEmpty(LinkStack *pst)
+{
+	return pst->head == NULL;
+}
 
 void LinkStackInit(LinkStack *pst)
 {
