@@ -1229,9 +1229,106 @@ void myCircularQueueFree(MyCircularQueue* obj)
 
 
 
+五、二叉树 基础OJ
+1、https://leetcode-cn.com/problems/binary-tree-preorder-traversal/ [二叉树的前序遍历]
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
 
 
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int size(struct TreeNode *t)
+{
+    if(t == NULL)
+        return 0;
+    else
+        return size(t->left) + size(t->right) + 1;
+}
 
+void _preorderTraversal(struct TreeNode *root, int *preorder_array, int *i)
+{
+    if(root != NULL)
+    {
+        preorder_array[*i] = root->val;
+        (*i)++;
+        _preorderTraversal(root->left, preorder_array, i);
+        _preorderTraversal(root->right, preorder_array, i);
+    }
+}
+
+int* preorderTraversal(struct TreeNode* root, int* returnSize)
+{
+    int n = size(root); //
+    int *preorder_array = (int*)malloc(sizeof(int) * n);
+    *returnSize = n;
+
+    // 遍历
+    int index = 0;
+    _preorderTraversal(root, preorder_array, &index);
+
+    return preorder_array;
+}
+
+4、https://leetcode-cn.com/problems/same-tree/ [相同的树]
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+
+bool isSameTree(struct TreeNode* p, struct TreeNode* q)
+{
+    if(p==NULL && q==NULL)
+        return true;
+    if(p==NULL || q==NULL)
+        return false;
+
+    return p->val==q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+}
+
+5、https://leetcode-cn.com/problems/subtree-of-another-tree/ [另一个树的子树]
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+bool _isSametree(struct TreeNode *s, struct TreeNode *t)
+{
+    if(s==NULL && t==NULL)
+        return true;
+    if(s==NULL || t==NULL)
+        return false;
+    
+    return s->val==t->val && _isSametree(s->left, t->left) && _isSametree(s->right, t->right);
+}
+
+bool isSubtree(struct TreeNode* s, struct TreeNode* t)
+{
+    if(t == NULL)
+        return true;
+    if(s == NULL)
+        return false;
+
+    if(_isSametree(s, t))
+        return true;
+    
+    return isSubtree(s->left, t) || isSubtree(s->right, t);
+}
 
 
 

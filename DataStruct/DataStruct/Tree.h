@@ -20,6 +20,8 @@ void BinTreeInit(BinTree *t);
 void BinTreeCreate_1(BinTree *t);
 BinTree BinTreeCreate_2();
 BinTree BinTreeCreate_3(const char *str, int *i);
+BinTree BinTreeCreate_VLR_LVR(const char *vlr, const char *lvr, int n);
+BinTree BinTreeCreate_LVR_LRV(const char *lvr, const char *lrv, int n);
 
 //递归遍历
 void PreOrder(BinTree t);
@@ -98,6 +100,36 @@ BinTree BinTreeCreate_3(const char *str, int *i)
 	}
 }
 
+BinTree BinTreeCreate_VLR_LVR(const char *vlr, const char *lvr, int n)
+{
+	if(n == 0)
+		return NULL;
+	
+	int k = 0;
+	while(lvr[k] != vlr[0])
+		k++;
+
+	BinTreeNode *t = (BinTreeNode*)malloc(sizeof(BinTreeNode));
+	assert(t != NULL);
+	t->data = lvr[k];
+
+	t->leftChild = BinTreeCreate_VLR_LVR(vlr+1, lvr, k);
+	t->rightChild = BinTreeCreate_VLR_LVR(vlr+k+1, lvr+k+1, n-k-1);
+
+	return t;
+}
+
+BinTree BinTreeCreate_LVR_LRV(const char *lvr, const char *lrv, int n)
+{
+	//同学自行完成
+
+	//1、现从后续在中序中找到根节点
+	//2、先创建右树
+	//3、在创建左树
+
+	return NULL;
+}
+
 void PreOrder(BinTree t)
 {
 	if(t != NULL)
@@ -145,6 +177,65 @@ void PreOrder_Nor(BinTree t)
 				LinkStackPush(&st, p->rightChild);
 			if(p->leftChild != NULL)
 				LinkStackPush(&st, p->leftChild);
+		}
+	}
+}
+
+void InOrder_Nor(BinTree t)
+{
+	if(t != NULL)
+	{
+		LinkStack st;
+		LinkStackInit(&st);
+
+		BinTreeNode *p;
+
+		LinkStackPush(&st, t);
+
+		while(!LinkStackEmpty(&st))
+		{
+			while(t && t->leftChild != NULL)
+			{
+				LinkStackPush(&st, t->leftChild);
+				t = t->leftChild;
+			}
+
+			p = LinkStackTop(&st);
+			LinkStackPop(&st);
+			printf("%c ", p->data);
+			
+			t = p->rightChild;
+			if(t != NULL)
+				LinkStackPush(&st, t);
+		}
+	}
+}
+
+void PostOrder_Nor(BinTree t)
+{
+	if(t != NULL)
+	{
+		LinkStack st;
+		LinkStackInit(&st);
+
+		BinTreeNode *p, *prev; //prev代表当前节点的前驱访问节点
+		while(t || !LinkStackEmpty(&st))
+		{
+			while(t)
+			{
+				LinkStackPush(&st, t);
+				t = t->leftChild;
+			}
+
+			p = LinkStackTop(&st);
+			if(p->rightChild==NULL || p->rightChild==prev)
+			{
+				printf("%c ", p->data);
+				LinkStackPop(&st); //要访问
+				prev = p; //更新prev访问节点
+			}
+			else
+				t = p->rightChild;
 		}
 	}
 }
@@ -249,3 +340,31 @@ bool    Equal(BinTree t1, BinTree t2)
 }
 
 #endif /* _TREE_H_ */
+
+/*
+void InOrder_Nor(BinTree t)
+{
+	if(t != NULL)
+	{
+		LinkStack st;
+		LinkStackInit(&st);
+
+		BinTreeNode *p;
+
+		while(t || !LinkStackEmpty(&st))
+		{
+			while(t)
+			{
+				LinkStackPush(&st, t);
+				t = t->leftChild;
+			}
+
+			p = LinkStackTop(&st);
+			LinkStackPop(&st);
+			printf("%c ", p->data);
+			
+			t = p->rightChild;
+		}
+	}
+}
+*/

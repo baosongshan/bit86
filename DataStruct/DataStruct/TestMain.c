@@ -6,6 +6,35 @@
 
 void main()
 {
+	char *vlr = "ABCDEFGH";
+	char *lvr = "CBEDFAGH";
+	char *lrv = "CEFDBHGA";
+	BinTree bt;
+	BinTreeInit(&bt);
+
+	int n = strlen(vlr);
+	bt = BinTreeCreate_VLR_LVR(vlr, lvr, n);
+
+	printf("VLR : ");
+	//PreOrder(bt);
+	PreOrder_Nor(bt);
+	printf("\n");
+	printf("LVR : ");
+	//InOrder(bt);
+	InOrder_Nor(bt);
+	printf("\n");
+	printf("LRV : ");
+	//PostOrder(bt);
+	PostOrder_Nor(bt);
+	printf("\n");
+	printf("Level : ");
+	LevelOrder(bt);
+	printf("\n");
+}
+
+/*
+void main()
+{
 	char *str = "ABC##DE##F##G#H##";
 	BinTree bt;
 	BinTreeInit(&bt);
@@ -21,10 +50,12 @@ void main()
 	PreOrder_Nor(bt);
 	printf("\n");
 	printf("LVR : ");
-	InOrder(bt);
+	//InOrder(bt);
+	InOrder_Nor(bt);
 	printf("\n");
 	printf("LRV : ");
-	PostOrder(bt);
+	//PostOrder(bt);
+	PostOrder_Nor(bt);
 	printf("\n");
 	printf("Level : ");
 	LevelOrder(bt);
