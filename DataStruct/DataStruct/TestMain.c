@@ -3,6 +3,7 @@
 //#include"Stack.h"
 //#include"Queue.h"
 #include"Tree.h"
+//#include"Heap.h"
 
 void main()
 {
@@ -13,7 +14,68 @@ void main()
 	BinTreeInit(&bt);
 
 	int n = strlen(vlr);
-	bt = BinTreeCreate_VLR_LVR(vlr, lvr, n);
+	//bt = BinTreeCreate_VLR_LVR(vlr, lvr, n);
+	bt = BinTreeCreate_LVR_LRV(lvr, lrv, n);
+
+	BinTreeDestroy(&bt);
+}
+
+/*
+int main()
+{
+	Heap hp;
+	HeapElemType ar[] = {27,15,19,18,28,34,65,49,25,37};
+	int n = sizeof(ar) / sizeof(ar[0]);
+
+	HeapInitByArray(&hp, ar, n);
+
+	while(!HeapEmpty(&hp))
+	{
+		HeapElemType top_val = HeapTop(&hp); 
+		printf("%d ", top_val);
+		HeapRemove(&hp);
+	}
+	printf("\n");
+
+	return 0;
+}
+
+/*
+int main()
+{
+	Heap hp;
+	HeapElemType ar[] = {27,15,19,18,28,34,65,49,25,37};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	HeapInit(&hp, 16);
+
+	for(int i=0; i<n; ++i)
+		HeapInsert(&hp, ar[i]);
+
+	//HeapShow(&hp);
+
+	while(!HeapEmpty(&hp))
+	{
+		HeapElemType top_val = HeapTop(&hp); 
+		printf("%d ", top_val);
+		HeapRemove(&hp);
+	}
+	printf("\n");
+
+	return 0;
+}
+
+/*
+void main()
+{
+	char *vlr = "ABCDEFGH";
+	char *lvr = "CBEDFAGH";
+	char *lrv = "CEFDBHGA";
+	BinTree bt;
+	BinTreeInit(&bt);
+
+	int n = strlen(vlr);
+	//bt = BinTreeCreate_VLR_LVR(vlr, lvr, n);
+	bt = BinTreeCreate_LVR_LRV(lvr, lrv, n);
 
 	printf("VLR : ");
 	//PreOrder(bt);

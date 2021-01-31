@@ -79,6 +79,7 @@
     <ClCompile Include="TestMain.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Heap.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="SeqList.h" />

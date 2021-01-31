@@ -43,6 +43,8 @@ BinTreeNode* Parent(BinTree t, BinTreeNode *s);
 BinTree Clone(BinTree t);
 bool    Equal(BinTree t1, BinTree t2);
 
+void BinTreeDestroy(BinTree *t);
+
 void BinTreeInit(BinTree *t)
 {
 	*t = NULL;
@@ -121,13 +123,24 @@ BinTree BinTreeCreate_VLR_LVR(const char *vlr, const char *lvr, int n)
 
 BinTree BinTreeCreate_LVR_LRV(const char *lvr, const char *lrv, int n)
 {
-	//同学自行完成
-
 	//1、现从后续在中序中找到根节点
 	//2、先创建右树
 	//3、在创建左树
+	if(n == 0)
+		return NULL;
 
-	return NULL;
+	int k = 0;
+	while(lvr[k] != lrv[n-1])
+		k++;
+
+	BinTreeNode *t = (BinTreeNode*)malloc(sizeof(BinTreeNode));
+	assert(t != NULL);
+	t->data = lvr[k];
+
+	t->rightChild = BinTreeCreate_LVR_LRV(lvr+k+1, lrv+k, n-k-1);
+	t->leftChild  = BinTreeCreate_LVR_LRV(lvr, lrv, k);
+
+	return t;
 }
 
 void PreOrder(BinTree t)
@@ -337,6 +350,17 @@ bool    Equal(BinTree t1, BinTree t2)
 	return (t1->data==t2->data)
 		   && Equal(t1->leftChild, t2->leftChild)
 		   && Equal(t1->rightChild, t2->rightChild);
+}
+
+void BinTreeDestroy(BinTree *t)
+{
+	if(*t != NULL)
+	{
+		BinTreeDestroy(&((*t)->leftChild));
+		BinTreeDestroy(&((*t)->rightChild));
+		free(*t);
+		*t = NULL;
+	}
 }
 
 #endif /* _TREE_H_ */
