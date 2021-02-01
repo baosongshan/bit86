@@ -3,6 +3,42 @@
 #include<vld.h>  //检测是否有内存泄漏 F5
 
 
+#define ROW 5
+#define COL 5
+
+void main()
+{
+	//动态
+	int **pa = (int**)malloc(sizeof(int*) * ROW);
+	for(int i=0; i<ROW; ++i)
+	{
+		pa[i] = (int *)malloc(sizeof(int) * COL);
+	}
+
+	for(int i=0; i<ROW; ++i)
+	{
+		for(int j=0; j<COL; ++j)
+		{
+			pa[i][j] = i + j;
+		}
+	}
+
+	for(int i=0; i<ROW; ++i)
+	{
+		for(int j=0; j<COL; ++j)
+		{
+			printf("%d ", pa[i][j]);
+		}
+		printf("\n");
+	}
+
+	for(int i=0; i<ROW; ++i)
+		free(pa[i]);
+
+	free(pa);
+}
+
+/*
 typedef struct ListNode
 {
 	int data;

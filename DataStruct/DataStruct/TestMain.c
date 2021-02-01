@@ -2,9 +2,29 @@
 //#include"List.h"
 //#include"Stack.h"
 //#include"Queue.h"
-#include"Tree.h"
+//#include"Tree.h"
 //#include"Heap.h"
+#include"Sort.h"
 
+int main()
+{
+	int ar[] = {49, 38, 65, 97, 76, 13, 27, 49};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	PrintArray(ar, 0, n);
+
+	//≈≈–Ú
+	//InsertSort_1(ar, 0, n);
+	//InsertSort_2(ar, 0, n);
+	InsertSort_3(ar, 0, n);
+
+	//≤‚ ‘–ß¬ 
+	TestSortEfficient();
+
+	PrintArray(ar, 0, n);
+	return 0;
+}
+
+/*
 void main()
 {
 	char *vlr = "ABCDEFGH";

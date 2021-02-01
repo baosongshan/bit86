@@ -83,6 +83,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="SeqList.h" />
+    <ClInclude Include="Sort.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Sysutil.h" />
     <ClInclude Include="Tree.h" />
