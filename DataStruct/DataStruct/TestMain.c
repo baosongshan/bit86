@@ -9,6 +9,53 @@
 int main()
 {
 	int ar[] = {49, 38, 65, 97, 76, 13, 27, 49};
+	//int ar[] = {12, 38, 65, 97, 100, 200, 300};
+	//int ar[] = {9, 1, 2, 5, 7, 4, 8, 6, 3, 5};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	PrintArray(ar, 0, n);
+
+	//排序
+	//InsertSort_1(ar, 0, n);
+	//InsertSort_2(ar, 0, n);
+	//InsertSort_3(ar, 0, n);
+	//BinInsertSort(ar, 0, n);
+	//TwoWayInsertSort(ar, 0, n);
+	//ShellSort(ar, 0, n);
+	//SelectSort(ar, 0, n);
+	HeapSort(ar, 0, n);
+
+	PrintArray(ar, 0, n);
+
+	//测试效率
+	TestSortEfficient();
+
+	return 0;
+}
+
+/*
+int main()
+{
+	int ar[] = {0, 49, 38, 65, 97, 76, 13, 27, 49};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	PrintArray(ar, 1, n);
+
+	//排序
+	//InsertSort_1(ar, 0, n);
+	//InsertSort_2(ar, 0, n);
+	//InsertSort_3(ar, 0, n);
+	InsertSort_4(ar, 1, n);
+	PrintArray(ar, 1, n);
+
+	//测试效率
+	TestSortEfficient();
+
+	return 0;
+}
+
+/*
+int main()
+{
+	int ar[] = {49, 38, 65, 97, 76, 13, 27, 49};
 	int n = sizeof(ar) / sizeof(ar[0]);
 	PrintArray(ar, 0, n);
 
@@ -16,11 +63,11 @@ int main()
 	//InsertSort_1(ar, 0, n);
 	//InsertSort_2(ar, 0, n);
 	InsertSort_3(ar, 0, n);
+	PrintArray(ar, 0, n);
 
 	//测试效率
 	TestSortEfficient();
 
-	PrintArray(ar, 0, n);
 	return 0;
 }
 
