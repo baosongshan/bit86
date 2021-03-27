@@ -1,0 +1,272 @@
+Lesson04 : 类与对象 下
+1、求1+2+3+...+n https://www.nowcoder.com/practice/7a0da8fc483247ff8800059e12d7caf1?tpId=13&tqId=11200&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+class Solution {
+public:
+    class Sum
+    {
+    public:
+        Sum()
+        {
+            _sum += _i;
+            _i++;
+        }
+    };
+     
+    int Sum_Solution(int n) {
+        _i = 1;
+        _sum = 0;
+        Sum array[n];
+        return _sum;
+    }
+     
+    static size_t _sum;
+    static size_t _i;
+};
+ 
+size_t Solution::_sum = 0;
+size_t Solution::_i = 1;
+
+2、计算日期到天数的转换 https://www.nowcoder.com/practice/769d45d455fe40b385ba32f97e7bcded?tpId=37&&tqId=21296&rp=1&ru=/activity/oj&qru=/ta/huawei/question-ranking
+#include<iostream>
+using namespace std;
+/*
+*思路：
+* 1. 通过枚举每个月的1号是这一年的第几天，从而进行累加求和即可，其中注意闰年的处理
+*/
+int main()
+{
+    int year, month, day;
+    while(cin>>year>>month>>day)
+    {
+        int monthDays[13] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+        int nday = monthDays[month-1] + day;
+        if(month > 2 &&
+           ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
+        {
+            nday += 1;
+        }
+ 
+        cout<<nday<<endl;
+    }
+     
+ return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+#include<iostream>
+using namespace std;
+
+bool IsLeap(int year)
+{
+    return ((year%4==0&&year%100!=0) || (year%400==0));
+}
+int GetDaysByYM(int year, int month)
+{
+    int days[] = {29,31,28,31,30,31,30,31,31,30,31,30,31};
+    if(month==2 && IsLeap(year))
+        month = 0;
+    return days[month];
+}
+
+int GetDayByYMD(int year, int month, int day)
+{
+    int sum = 0;
+    for(int i=1; i<month; ++i)
+        sum += GetDaysByYM(year, i);
+    sum += day;
+    return sum;
+}
+
+int main()
+{
+    int year, month, day, ret;
+    while(cin>>year>>month>>day)
+    {
+        ret = GetDayByYMD(year, month, day);
+        cout<<ret<<endl;
+    }
+    return 0;
+}
+
+
+3、日期差值 https://www.nowcoder.com/practice/ccb7383c76fc48d2bbc27a2a6319631c?tpId=62&&tqId=29468&rp=1&ru=/activity/oj&qru=/ta/sju-kaoyan/question-ranking
+#include <iostream>
+   using namespace std;
+   /*
+   *思路：
+   * 1. 分别求出每一个日期与0000年0月1日距离的天数
+   * 2. 两个距离天数相减即可得到两个日期相差的天数
+   */
+   //平年从1月到n月的天数
+   int mon[12]={0,31,59,90,120,151,181,212,243,273,304,334};
+   //给出年月日，计算距离0000年0月1日的天数和
+  
+   int CountDay(int y,int m,int d)
+   {
+       // 计算0-y年的天数
+       int yearDay = y*365+y/4-y/100+y/400;
+       // 计算到0-m月的天数
+       int monthDay = mon[m-1];
+       
+       if(m > 2 && ((y%4 == 0 && y%100 != 0) || y%400==0))
+           monthDay += 1;
+       
+       return yearDay + monthDay + d;
+   }
+  
+   int main()
+   {
+       int year1,month1,day1;
+       scanf("%4d%2d%2d",&year1,&month1,&day1);
+       int n1 = CountDay(year1,month1,day1);
+       
+       int year2,month2,day2;
+    scanf("%4d%2d%2d",&year2,&month2,&day2);
+       int n2 = CountDay(year2,month2,day2);
+       
+       cout<<abs(n1-n2)+1<<endl;
+   }
+  
+4、打印日期 https://www.nowcoder.com/practice/b1f7a77416194fd3abd63737cdfcf82b?tpId=69&&tqId=29669&rp=1&ru=/activity/oj&qru=/ta/hust-kaoyan/question-ranking
+#include <iostream>
+   using namespace std;
+     
+   int main()
+   {
+       int year;
+       int day;
+         
+       int mon[13] = {31, 28, 31, 30, 31, 30, 31, 31, 30 ,31, 30, 31};    
+       while(cin>>year>>day)
+       {
+           if(((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+               mon[1] = 29;
+           else
+               mon[1] = 28;
+               
+           for(int i = 0; i < 12; i++)
+           {
+               if(day <= mon[i])
+               {
+                   printf("%04d-%02d-%02d\n", year, i + 1, day);
+                   break;
+               }
+               else
+               {
+                day = day - mon[i];
+               }
+        }
+       }
+       return 0;
+   }
+
+////////////////////////////////////////////////////////////////////////////////////////
+#include<iostream>
+using namespace std;
+
+int main()
+{
+    int year, day;
+    while(cin>>year>>day)
+    {
+        int mdays[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+        if((year%4==0&&year%100!=0) || (year%400==0))
+            mdays[2] = 29;
+        else 
+            mdays[2] = 28;
+        int month = 1;
+        while(day > mdays[month])
+        {
+            day -= mdays[month];
+            month++;
+        }
+        printf("%04d-%02d-%02d\n", year, month, day);
+    }
+    return 0;
+}
+
+5、累加天数 https://www.nowcoder.com/practice/eebb2983b7bf40408a1360efb33f9e5d?tpId=40&&tqId=31013&rp=1&ru=/activity/oj&qru=/ta/kaoyan/question-ranking
+  #include<iostream>
+   using namespace std;
+    
+   int main()
+   {
+       int n;
+       while(cin>>n)
+       {
+           for(int i=0;i<n;i++)
+           {
+              int y,m,d,num;
+              int days[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+              cin>>y>>m>>d>>num;
+              
+              while(num>days[m-1])
+              {
+                  if(y%400==0||(y%4==0&&y%100!=0))
+                      days[1]=29;
+                  else
+                      days[1]=28;
+                 
+                  num -= days[m-1]-d;
+                  d=0;
+                  m++;
+                  if(m==13)
+                  {
+                      y++;
+                      m=1;
+                  }
+           }
+               printf("%4d-%02d-%02d\n",y,m,num);
+           }
+       }
+       return 0;
+   }
+
+//////////////////////////////////////////////////////////////////////////////////////
+#include<iostream>
+using namespace std;
+
+bool IsLeap(int year)
+{
+    return ((year%4==0&&year%100!=0) || (year%400==0));
+}
+int GetDaysByYM(int year, int month)
+{
+    int days[] = {29,31,28,31,30,31,30,31,31,30,31,30,31};
+    if(month==2 && IsLeap(year))
+        month = 0;
+    return days[month];
+}
+
+void GetNextDate(int year, int month, int day, int n)
+{
+    int mdays = GetDaysByYM(year, month);
+    while(day + n > mdays)
+    {
+        month++;
+        if(month > 12)
+        {
+            year++;
+            month = 1;
+        }
+        n -= mdays;
+        mdays = GetDaysByYM(year, month);
+    }
+    printf("%04d-%02d-%02d\n", year, month, day+n);
+}
+
+int main()
+{
+    int m;
+    while(cin >> m)
+    {
+        for(int i=0; i<m; ++i)
+        {
+            int year, month, day, n;
+            cin>>year>>month>>day>>n;
+            GetNextDate(year, month, day, n);
+        }
+    }
+    return 0;
+}
