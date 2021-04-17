@@ -270,3 +270,290 @@ int main()
     }
     return 0;
 }
+
+
+Lesson8 String
+1、字符串转整形数字 https://www.nowcoder.com/practice/1277c681251b4372bdef344468e4f26e?tpId=13&tqId=11202&rp=6&ru=%2Factivity%2Foj&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking&tab=answerKey
+class Solution {
+public:
+    
+    int StrToInt(string str) 
+    {
+        if(str.size() == 0)
+            return 0;
+        
+        int i = 0;
+        
+        int flag = 1;
+        if(str[0] == '+')
+        {
+            flag = 1;
+            i++;
+        }
+        else if(str[0] == '-')
+        {
+            flag = -1;
+            i++;
+        }
+        
+        unsigned long num = 0;
+        
+        while(i < str.size())
+        {
+            if(str[i]<'0' || str[i]>'9')
+                return 0;
+            num = num * 10 + str[i]-'0';
+            i++;
+        }
+        return flag*num;
+    }
+};
+
+2、字符串相加 https://leetcode-cn.com/problems/add-strings/
+class Solution {
+public:
+
+    int AddItem(int a, int b, int &sign)
+    {
+        int sum = a + b + sign;
+        if(sum >= 10)
+        {
+            sum -= 10;
+            sign = 1;
+        }
+        else
+            sign = 0;
+        return sum;
+    }
+                      //1234         //3456
+    string addStrings(string num1, string num2) 
+    {
+        reverse(num1.begin(), num1.end()); //456
+        reverse(num2.begin(), num2.end()); // 77
+
+        string result;
+        size_t i, j;
+        i = j = 0;
+        int sum, sign = 0;
+        while(i<num1.size() && j<num2.size())
+        {
+            sum = AddItem(num1[i]-'0', num2[j]-'0', sign);
+            result += (sum+'0');
+            i++;
+            j++;
+        }
+
+        while(i < num1.size())
+        {
+            sum = AddItem(num1[i]-'0', 0, sign);
+            result += (sum+'0');
+            i++;
+        }
+
+        while(j < num2.size())
+        {
+            sum = AddItem(0, num2[j]-'0', sign);            
+            result += (sum+'0');
+            j++;
+        }
+        if(sign > 0)
+            result += (sign+'0');
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+
+3、仅仅反转字母 https://leetcode-cn.com/problems/reverse-only-letters/submissions/
+class Solution {
+public:
+
+    bool isLetter(char ch)
+    {
+        if((ch>='a' && ch<='z') || (ch>='A'&&ch<='Z'))
+            return true;
+        return false;
+    }
+    string reverseOnlyLetters(string S) 
+    {
+        if(S.size() == 1)
+            return S;
+        int start = 0;
+        int end = S.size()-1;
+        while(start < end)
+        {
+            while(start<end && !isLetter(S[start]))
+                start++;
+            while(end>start && !isLetter(S[end]))
+                end--;
+            std::swap(S[start], S[end]);       
+            start++;
+            end--; 
+        }
+        return S;
+    }
+};
+
+4、字符串中的第一个唯一字符 https://leetcode-cn.com/problems/first-unique-character-in-a-string/
+[暴力法]
+class Solution {
+public:
+    int firstUniqChar(string s) 
+    {
+        int j;
+        for(int i=0; i<s.size(); ++i)
+        {
+            for(j=0; j<s.size();++j)
+            {
+                if(i == j)
+                    continue;
+                if(s[j] == s[i])
+                    break;
+            }
+            if(j == s.size())
+                return i;
+        }
+        return -1;
+    }
+    
+};
+
+[hash]
+class Solution {
+public:
+    int firstUniqChar(string s) 
+    {
+        int hash[256] = {0};
+        for(int i=0; i<s.size(); ++i)
+        {
+            hash[s[i]]++;
+        }
+
+         for(int i=0; i<s.size(); ++i)
+         {
+             if(hash[s[i]] == 1)
+                return i;
+         }
+         return -1;
+    }
+};
+
+class Solution {
+public:
+    int firstUniqChar(string s) 
+    {
+        for(int i=0; i<s.size(); ++i)
+        {
+            int index = s.find(s[i]);
+            int r_index = s.rfind(s[i]);
+            if(index == r_index)
+                return i;
+        }
+        return -1;
+    }
+};
+
+
+5、字符串里面最后一个单词的长度 https://www.nowcoder.com/practice/8c949ea5f36f422594b306a2300315da?tpId=37&tqId=21224&rp=5&ru=%2Factivity%2Foj&qru=%2Fta%2Fhuawei%2Fquestion-ranking&tab=answerKey
+#include<iostream>
+#include<string>
+using namespace std;
+
+int GetLengthLastWord(string &str)
+{
+    int pos = str.rfind(' ');
+    if(pos == string::npos)
+        return str.size();
+    return str.size()-pos-1;
+}
+
+int main()
+{
+    string str;
+    while(getline(cin, str))
+    {
+        int len = GetLengthLastWord(str);
+        cout<<len;
+    }
+    return 0;
+}
+
+
+课后作业4、字符串相乘 https://leetcode-cn.com/problems/multiply-strings/submissions/
+class Solution {
+public:
+
+    void MulItem(string num, int s,  string &tmp)
+    {
+        int res, sign = 0;
+
+        for(int i=0; i<num.size(); ++i)
+        {
+            res = s * (num[i]-'0') + sign;
+            if(res >= 10)
+            { 
+                sign = res / 10;
+                res = res % 10;
+            }
+            else
+                sign = 0;
+            tmp += (res+'0');
+        }
+        if(sign > 0)
+		    tmp += (sign+'0');
+    }
+
+    int AddItem(int a, int b, int &sign)
+    {
+        int sum = a + b + sign;
+        if(sum >= 10)
+        {
+            sum -= 10;
+            sign = 1;
+        }
+        else
+            sign = 0;
+        return sum;
+    }
+    void AddMove(string &num, string tmp, int k)
+    {
+        int i=k;
+        int j = 0;
+        int sign = 0;
+        while(i<num.size() && j<tmp.size())
+        {
+            num[i] = AddItem(num[i]-'0', tmp[j]-'0', sign) + '0';
+            i++;
+            j++;
+        }        
+        while(i<num.size())
+        {
+            num[i] = AddItem(num[i]-'0', 0, sign) + '0';
+            i++;
+        }  
+        while(j<tmp.size())
+        {
+            int sum = AddItem(0, tmp[j]-'0', sign);
+            num += (sum+'0');
+            j++;
+        }  
+        if(sign > 0)
+            num += (sign+'0');
+    }
+    string multiply(string num1, string num2) 
+    {
+        reverse(num1.begin(), num1.end());
+        reverse(num2.begin(), num2.end());
+
+        string result, tmp;
+        for(int i=0; i<num2.size(); ++i)
+        {
+            MulItem(num1, num2[i]-'0', tmp);
+            AddMove(result, tmp, i);
+            tmp.clear();
+        }
+        while(result.size()>1 && result.back() == '0')
+		    result.pop_back();
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
