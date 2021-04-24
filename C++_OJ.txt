@@ -557,3 +557,357 @@ public:
         return result;
     }
 };
+
+课后练习
+1、反转字符串 II https://leetcode-cn.com/problems/reverse-string-ii/
+class Solution {
+public:
+    void Reverse(string &s, int start, int end)
+    {
+        int i = start;
+        int j = end-1;
+        while(i < j)
+        {
+            char tmp = s[i];
+            s[i] = s[j];
+            s[j] = tmp;
+
+            i++;
+            j--;
+        }        
+    }
+    string reverseStr(string s, int k) 
+    {
+  
+        int len = s.size();
+
+        for(int i=0; i<len; i+=2*k)
+        {
+            if(i+k < len)
+                Reverse(s, i, i+k);
+            else
+                Reverse(s, i, len);
+        }
+        return s;
+    }
+};
+
+2、反转字符串中的单词 III https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/
+class Solution {
+public:
+        void Reverse(string &s, int start, int end)
+        {
+            int i = start;
+            int j = end-1;
+            while(i < j)
+            {
+                char tmp = s[i];
+                s[i] = s[j];
+                s[j] = tmp;
+
+                i++;
+                j--;
+        }        
+    }
+    string reverseWords(string s) 
+    {
+        int start = 0;
+        int end = s.find(' ');
+        while(end != string::npos)
+        {
+            Reverse(s, start, end);
+            start = end+1;
+            end = s.find(' ', start);
+        }
+        Reverse(s, start, s.size());
+        return s;
+    }
+};
+
+
+4、找出字符串中第一个只出现一次的字符 https://www.nowcoder.com/practice/e896d0f82f1246a3aa7b232ce38029d4?tpId=37&tqId=21282&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fhuawei%2Fquestion-ranking&tab=answerKey
+#include<iostream>
+#include<string>
+using namespace std;
+
+//1
+int FindFristOnly(string &str)
+{
+    for(int i=0; i<str.size(); ++i)
+    {
+        int index = str.find(str[i]);
+        int r_index = str.rfind(str[i]);
+        if(index == r_index)
+            return str[index];
+    }
+    return -1;
+}
+
+//2
+int FindFristOnly(string &str)
+{
+    int hash[256] = {0};
+    for(int i=0; i<str.size(); ++i)
+        hash[str[i]]++;
+    for(int i=0; i<str.size(); ++i)
+    {
+        if(hash[str[i]] == 1)
+            return str[i];
+    }
+    return -1;
+}
+
+int main()
+{
+    string str;
+    while(getline(cin, str))
+    {
+        int res = FindFristOnly(str);
+        if(res != -1)
+            cout<<(char)res<<endl;
+        else
+            cout<<-1;
+    }
+    return 0;
+}
+
+
+Lesson9 vector
+1、只出现一次的数字 https://leetcode-cn.com/problems/single-number/
+class Solution {
+public:
+    // 1 3 5 7 9 9 7 5 3 1 2
+    int singleNumber(vector<int>& nums) 
+    {
+        int result = 0;
+        for(int i=0; i<nums.size(); ++i)
+            result ^= nums[i];
+        return result;
+    }
+};
+
+2、杨辉三角 https://leetcode-cn.com/problems/pascals-triangle/submissions/
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) 
+    {
+        //resize()  reserve()
+        vector<vector<int>> vv;
+        vv.resize(numRows);
+
+        for(int i=0; i<numRows; ++i)
+        {
+            vv[i].resize(i+1);
+            vv[i][0] = vv[i][i] = 1;
+        }
+
+        for(int i=2; i<vv.size(); ++i)
+        {
+            for(int j=1; j<vv[i].size()-1; ++j)
+                vv[i][j] = vv[i-1][j-1] + vv[i-1][j];          
+        }
+
+        return vv;
+    }
+};
+
+3、删除有序数组中的重复项 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/
+//1 使用迭代器
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) 
+    {
+        if(nums.size() <= 1)
+            return nums.size();
+            
+        auto s = nums.begin();
+        auto e = s+1;
+        while(s != nums.end())
+        {
+            while(e!=nums.end() && *e==*s)
+                ++e;
+            s++;
+            s = nums.erase(s, e);
+            e = s+1;
+        }
+        return nums.size();
+    }
+};
+//2 使用容器 list unique
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) 
+    {
+        if(nums.size() <= 1)
+            return nums.size();
+
+       list<int> lt(nums.begin(), nums.end());
+       lt.unique();
+       nums = vector<int>(lt.begin(), lt.end());
+       return nums.size();
+    }
+};
+
+4、只出现一次的数字 II https://leetcode-cn.com/problems/single-number-ii/
+//暴力法
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) 
+    {
+        int map[10000][2] = {0};
+        int k = 0; //代表数字的个数
+
+        int j;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            for(j=0; j<k; ++j)
+            {
+                if(map[j][0] == nums[i])
+                {
+                    map[j][1]++;
+                    break;
+                }
+            }
+            if(j == k)
+            {
+                map[k][0] = nums[i];
+                map[k][1] = 1;
+                k++;
+            }
+        }
+
+        int result;
+        for(int i=0; i<k; ++i)
+        {
+            if(map[i][1] == 1)
+                result = map[i][0];
+        }
+        return result;
+    }
+};
+//位运算法
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) 
+    {
+        int result = 0;
+        for(int i=0; i<32; ++i)
+        {
+            int mask = 1<<i;  //00 00 00 01
+            int count = 0;
+            for(int j=0; j<nums.size(); ++j)
+            {
+                if((nums[j] & mask) != 0)
+                    count++;
+            }
+
+            if((count % 3) != 0)
+                result = result | mask;
+        }
+        return result;
+    }
+};
+
+5、 只出现一次的数字 III https://leetcode-cn.com/problems/single-number-iii/
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) 
+    {
+        int result = 0;
+        for(int i=0; i<nums.size(); ++i)
+            result ^= nums[i];
+        
+        int mask = 1;
+        while((mask & result) == 0)
+            mask <<= 1;
+
+        vector<int> res(2);
+        for(int i=0; i<nums.size(); ++i)
+        {
+            if((nums[i] & mask) == 0)
+                res[0] ^= nums[i];
+            else
+                res[1] ^= nums[i];
+        }
+        return res;
+    }
+};
+
+6、数组中出现次数超过一半的数字 OJ https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=13&tqId=11181&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking&tab=answerKey
+//暴力法
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) 
+    {
+        
+        int map[10000][2] = {0};
+        int k = 0; //代表数字的个数
+
+        int j;
+        for(int i=0; i<numbers.size(); ++i)
+        {
+            for(j=0; j<k; ++j)
+            {
+                if(map[j][0] == numbers[i])
+                {
+                    map[j][1]++;
+                    break;
+                }
+            }
+            if(j == k)
+            {
+                map[k][0] = numbers[i];
+                map[k][1] = 1;
+                k++;
+            }
+        }
+        
+        int len = numbers.size();
+        for(int i=0; i<k; ++i)
+        {
+            if(map[i][1] > len/2)
+                return map[i][0];
+        }
+        return 0;
+    }
+};
+
+//利用排序
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) 
+    {
+        sort(numbers.begin(), numbers.end()); 
+        int len = numbers.size();
+        int mid = numbers[len / 2];
+        
+        int count = 0;
+        for(int i=0; i<numbers.size(); ++i)
+        {
+            if(numbers[i] == mid)
+                count++;
+        }
+        
+        return count > len/2 ? mid : 0;
+    }
+};
+
+7、电话号码组合 -暂时不讲
+
+8、连续子数组的最大和 OJ https://www.nowcoder.com/practice/459bd355da1549fa8a49e350bf3df484?tpId=13&tqId=11183&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking&tPage=2&tab=answerKey
+class Solution {
+public:
+    int FindGreatestSumOfSubArray(vector<int> array) 
+    {
+        int cursum = array[0];
+        int maxsum = array[0];
+        for(int i=1; i<array.size(); ++i)
+        {
+            cursum += array[i];
+            if(cursum < array[i])
+                cursum = array[i];
+            if(cursum > maxsum)
+                maxsum = cursum;
+        }
+        return maxsum;
+    }
