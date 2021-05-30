@@ -8,8 +8,12 @@ template<class Type>
 class RBTree;
 
 template<class Type>
+class rb_iterator;
+
+template<class Type>
 class RBNode
 {
+	friend class rb_iterator<Type>;
 	friend class RBTree<Type>;
 public:
 	RBNode()
@@ -30,14 +34,102 @@ private:
 	Color_Type    color;
 };
 
+/////////////////////////////////////////////////////////////////
+template<class Type>
+class rb_iterator
+{
+public: 
+	rb_iterator(RBNode<Type> *n=nullptr, 
+				RBNode<Type>*nil=nullptr,
+				RBNode<Type> *end=nullptr) 
+		: cur(n),Nil(nil),end_node(end)
+	{}
+public:
+	rb_iterator& operator++()
+	{
+		increment();
+		return *this;
+	}
+	rb_iterator& operator--()
+	{
+
+	}
+	Type& operator*()
+	{
+		return cur->data;
+	}
+	bool operator!=(const rb_iterator<Type> &rbit)
+	{
+		return cur != rbit.cur;
+	}
+	bool operator==(const rb_iterator<Type> &rbit)
+	{
+		return cur == rbit.cur;
+	}
+protected:
+	void increment()
+	{
+		if(cur->rightChild != Nil)
+		{
+			cur = cur->rightChild;
+			if(cur == end_node)
+				return;
+			while(cur->leftChild != Nil)
+				cur = cur->leftChild;
+		}
+		else
+		{
+			RBNode<Type> *pr = cur->parent;
+			while(cur == pr->rightChild)
+			{
+					cur = pr;
+					pr = cur->parent;
+			}
+			if(pr->rightChild != cur)
+				cur = pr;
+		}
+	}
+	void decrement()
+	{
+
+	}
+private:
+	RBNode<Type> *cur;
+	RBNode<Type> *Nil;
+	RBNode<Type> *end_node;
+};
+/////////////////////////////////////////////////////////////////
+
 template<class Type>
 class RBTree
 {
 public:
-	RBTree():root(Nil),Nil(_Buynode())
+	typedef rb_iterator<Type> iterator;
+public:
+	RBTree():root(Nil),Nil(_Buynode()),end_node(_Buynode())
 	{
 		Nil->leftChild = Nil->rightChild = Nil->parent = nullptr;
 		Nil->color = BLACK;
+		end_node->leftChild = end_node->rightChild = end_node->parent = nullptr;
+	}
+public:
+	iterator begin()
+	{
+		RBNode<Type> *p = root;
+		while(p!=Nil && p->leftChild!=Nil)
+			p = p->leftChild;
+		return iterator(p,Nil,end_node);
+	}
+	iterator end()
+	{
+		return iterator(end_node,Nil,end_node);
+	}
+	void set_end_node()
+	{
+		RBNode<Type> *p = root;
+		while(p!=Nil && p->rightChild != Nil)
+			p = p->rightChild;
+		p->rightChild = end_node;
 	}
 public:
 	bool Insert(const Type &x)
@@ -101,6 +193,7 @@ protected:
 private:
 	RBNode<Type> *Nil;  //�ն˿սڵ�
 	RBNode<Type> *root;
+	RBNode<Type> *end_node;
 };
 
 template<class Type>
@@ -335,7 +428,16 @@ void main()
 	for(const auto &e : iv)
 		rb.Insert(e);
 
-	rb.Remove(6);
+	rb.set_end_node();
+	//rb.Remove(6);
+
+	RBTree<int>::iterator it = rb.begin();
+	while(it != rb.end())
+	{
+		cout<<*it<<" ";
+		++it;
+
+	}
 
 	return;
 }
