@@ -218,6 +218,161 @@ bool AVLTree<Type>::Remove(AVLNode<Type> *&t, const Type &key)
 	//1 根据BST删除节点
 	AVLNode<Type> *pr = nullptr;
 	AVLNode<Type> *p = t, *q=nullptr;
+
+	stack<AVLNode<Type>*> st;
+
+	while(p != nullptr)
+	{
+		if(p->data == key)
+			break;
+
+		pr = p;
+		st.push(pr);
+
+		if(key < p->data)
+			p = p->leftChild;
+		else
+			p = p->rightChild;
+	}
+	if(p == nullptr)
+		return false;
+
+	if(p->leftChild!=nullptr && p->rightChild!=nullptr)
+	{
+		q = p->leftChild;
+		pr = p;
+		st.push(pr);
+		while(q->rightChild != nullptr)
+		{
+			pr = q;
+			st.push(pr);
+			q = q->rightChild;
+		}
+		p->data = q->data;
+		p = q;
+	}
+
+	//p是要删除的节点 q是p节点子女节点
+	if(p->leftChild != nullptr)
+		q = p->leftChild;
+	else
+		q = p->rightChild;
+
+	if(pr == nullptr)
+	{
+		t = q;
+	}
+	else
+	{
+		//断开p节点
+		if(p == pr->leftChild)
+			pr->leftChild = q;
+		else
+			pr->rightChild = q;
+	}
+
+	//2 平衡BST
+	bool is_break_flag = false;
+	while(!st.empty())
+	{
+		pr = st.top();
+		st.pop();
+
+		if(p->data < pr->data)
+			pr->bf++;
+		else
+			pr->bf--;
+
+		//考察pr的bf
+		if(pr->bf==1 || pr->bf==-1)
+			break;
+		if(pr->bf == 0)
+			q = pr;
+		else
+		{
+			//|bf| == 2
+			//让q指向pr的较高子树
+			if(pr->bf < 0)
+				q = pr->leftChild; //左树高
+			else
+				q = pr->rightChild;//右树高
+
+			if(q->bf == 0)//单旋转
+			{
+				if(pr->bf < 0)
+				{
+					RotateR(pr);
+					pr->bf = 1;
+					pr->rightChild->bf = -1;
+				}
+				else
+				{
+					RotateL(pr);
+					pr->bf = -1;
+					pr->leftChild->bf = 1;
+				}
+				is_break_flag = true;
+			}
+			else
+			{			
+				if (pr->bf < 0)
+				{
+					if (q->bf < 0)  //   /
+						RotateR(pr);
+					else           //   <
+						RotateLR(pr);
+				}
+				else
+				{
+					if (q->bf > 0)  //   \ 
+						RotateL(pr);
+					else           //   >
+						RotateRL(pr);
+				}
+
+			}
+			//重新链接
+			if(st.empty())
+				t = pr;
+			else
+			{
+				q = st.top();
+				if(pr->data < q->data)
+					q->leftChild = pr;
+				else
+					q->rightChild = pr;
+			}
+			if(is_break_flag)
+				break;
+		}
+	}
+	delete p;
+	return true;
+}
+
+void main()
+{
+	vector<int> iv{16, 3, 7, 11, 9, 26, 18, 14, 15};
+	//vector<int> iv{16, 3, 7};
+	AVLTree<int> avl;
+
+	for(const auto &e : iv)
+		avl.Insert(e);
+
+	//avl.Remove(3);
+	avl.Remove(16);
+	avl.Remove(26);
+
+	return;
+}
+
+/*
+template<class Type>
+bool AVLTree<Type>::Remove(AVLNode<Type> *&t, const Type &key)
+{
+	//1 根据BST删除节点
+	AVLNode<Type> *pr = nullptr;
+	AVLNode<Type> *p = t, *q=nullptr;
 	AVLNode<Type> *Nil = new AVLNode<Type>(0);
 
 	stack<AVLNode<Type>*> st;
@@ -263,7 +418,12 @@ bool AVLTree<Type>::Remove(AVLNode<Type> *&t, const Type &key)
 
 	bool isLeftChild = false;
 	if(pr == nullptr)
-		t = q;
+	{
+		if(q == Nil)
+			t = nullptr;
+		else
+			t = q;
+	}
 	else
 	{
 		//断开p节点
@@ -364,21 +524,7 @@ bool AVLTree<Type>::Remove(AVLNode<Type> *&t, const Type &key)
 	return true;
 }
 
-void main()
-{
-	vector<int> iv{16, 3, 7, 11, 9, 26, 18, 14, 15};
-	AVLTree<int> avl;
 
-	for(const auto &e : iv)
-		avl.Insert(e);
-
-	avl.Remove(3);
-	avl.Remove(9);
-
-	return;
-}
-
-/*
 template<class Type>
 bool AVLTree<Type>::Remove(AVLNode<Type> *&t, const Type &key)
 {

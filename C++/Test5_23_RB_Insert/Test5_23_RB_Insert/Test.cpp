@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<string>
 using  namespace std;
 
 typedef enum{RED=0, BLACK}Color_Type;
@@ -58,6 +59,11 @@ public:
 	{
 		return cur->data;
 	}
+	Type* operator->()
+	{
+		return &(cur->data);
+	}
+
 	bool operator!=(const rb_iterator<Type> &rbit)
 	{
 		return cur != rbit.cur;
@@ -111,6 +117,19 @@ public:
 		Nil->leftChild = Nil->rightChild = Nil->parent = nullptr;
 		Nil->color = BLACK;
 		end_node->leftChild = end_node->rightChild = end_node->parent = nullptr;
+	}
+public:
+	size_t size()const
+	{
+		return size(root);
+	}
+protected:
+	size_t size(RBNode<Type> *t)const
+	{
+		if(t == Nil)
+			return 0;
+		else 
+			return size(t->leftChild) + size(t->rightChild) + 1;
 	}
 public:
 	iterator begin()
@@ -419,6 +438,118 @@ void RBTree<Type>::Remove_Fixup(RBNode<Type> *&t, RBNode<Type> *x)
 	x->color = BLACK; //
 }
 
+////////////////////////////////////////////////////////////////////////////
+template<class Key>
+class Set
+{
+public:
+	typedef Key value_type;
+	typedef typename RBTree<value_type>::iterator iterator;
+public:
+	iterator begin()
+	{
+		return _Tr.begin();
+	}
+	iterator end()
+	{
+		return _Tr.end();
+	}
+
+public:
+	size_t size()const
+	{
+		return _Tr.size();
+	}
+	void insert(const value_type &x)
+	{
+		_Tr.Insert(x);
+	}
+	void set_end_node()
+	{
+		_Tr.set_end_node();
+	}
+
+private:
+	RBTree<value_type> _Tr;
+};
+
+template<class Key, class Value>
+class Map
+{
+public:
+	typedef pair<Key, Value> value_type;
+	typedef typename RBTree<value_type>::iterator iterator;
+public:
+	iterator begin()
+	{
+		return _Tr.begin();
+	}
+	iterator end()
+	{
+		return _Tr.end();
+	}
+public:
+	size_t size()const
+	{
+		return _Tr.size();
+	}
+	void insert(const value_type &x)
+	{
+		_Tr.Insert(x);
+	}
+	void set_end_node()
+	{
+		_Tr.set_end_node();
+	}
+private:
+	RBTree<value_type> _Tr;
+};
+
+void main()
+{
+	pair<int, string> v[] = 
+	{{3,"Student"}, {1,"Teacher"}, {5,"Firend"},{2,"Family"}};
+
+	Map<int, string> mymap;
+
+	mymap.insert(v[0]);
+	mymap.insert(v[1]);
+	mymap.insert(v[2]);
+	mymap.insert(v[3]);
+
+	mymap.set_end_node();
+
+	Map<int,string>::iterator it = mymap.begin();
+	while(it != mymap.end())
+	{
+		cout<<it->first<<" : "<<it->second<<endl;
+		++it;
+	}
+}
+
+/*
+void main()
+{
+	vector<int> iv{10, 7, 8, 15, 5, 6, 11, 13, 12};
+	Set<int> myset;
+	for(const auto &e : iv)
+		myset.insert(e);
+
+	//cout<<"size = "<<myset.size()<<endl;
+	myset.set_end_node();
+
+	Set<int>::iterator it = myset.begin();
+	while(it != myset.end())
+	{
+		cout<<*it<<" ";
+		++it;
+	}
+	cout<<endl;
+
+}
+
+
+/*
 void main()
 {
 	vector<int> iv{10, 7, 8, 15, 5, 6, 11, 13, 12};
@@ -441,3 +572,4 @@ void main()
 
 	return;
 }
+*/
