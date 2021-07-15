@@ -91,6 +91,20 @@ class __default_alloc_template
 {
 public:
 	static void* allocate(size_t n);
+	static void deallocate(void *p, size_t n)
+	{
+		obj *q = (obj *)p;
+		obj ** my_free_list;
+
+		if (n > (size_t)__MAX_BYTES) 
+		{
+			malloc_alloc::deallocate(p, n);
+			return;
+		}
+		my_free_list = free_list + FREELIST_INDEX(n);
+		q->free_list_link = *my_free_list;
+		*my_free_list = q;
+	}
 private:
 	static void* refill(size_t n);
 	static char* chunk_alloc(size_t size, int &nobjs);

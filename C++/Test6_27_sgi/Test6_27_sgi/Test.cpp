@@ -1,9 +1,34 @@
 #include<iostream>
-#include<list>
+//#include<list>
 //#include"stl_alloc.h"
 #include"stl_vector.h"
+#include"stl_list.h"
+#include"stl_deque.h"
 using namespace std;
 
+void main()
+{
+	deque<int> de;
+}
+
+/*
+void main()
+{
+	//vector<int> iv(10);
+	list<int> mylist;
+	for(int i=1; i<=10; ++i)
+		mylist.push_back(i);
+
+	list<int>::iterator it = mylist.begin();
+	while(it != mylist.end())
+	{
+		cout<<*it<<"-->";
+		++it;
+	}
+	cout<<"Over."<<endl;
+}
+
+/*
 class Test
 {
 public:

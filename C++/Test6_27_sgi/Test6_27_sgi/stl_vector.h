@@ -22,6 +22,11 @@ public:
 	{
 		fill_initialize(n, value);
 	}
+	~vector() 
+	{ 
+		destroy(start, finish);
+		deallocate();
+	}
 private:
 	void fill_initialize(size_type n, const T &value)
 	{
@@ -34,6 +39,12 @@ private:
 		iterator result = data_allocator::allocate(n);
 		Uninitialized_fill_n(result, n, x);
 		return result;
+	}
+private:
+	void deallocate() 
+	{
+		if (start) 
+			data_allocator::deallocate(start, end_of_storage - start);
 	}
 private:
 	iterator start;

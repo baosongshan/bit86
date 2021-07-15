@@ -38,5 +38,11 @@
     <ClInclude Include="stl_construct.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="stl_list.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stl_deque.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
