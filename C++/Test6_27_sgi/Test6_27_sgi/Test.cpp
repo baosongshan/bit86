@@ -4,11 +4,62 @@
 #include"stl_vector.h"
 #include"stl_list.h"
 #include"stl_deque.h"
+#include"stl_tree.h"
 using namespace std;
+
+template<class T>
+struct KeyOfValue
+{
+	T operator()(T value)
+	{
+		return value;
+	}
+};
+
+template<class T>
+struct Compare
+{
+	bool operator()(T left, T right)
+	{
+		return left < right;
+	}
+};
 
 void main()
 {
-	deque<int> de;
+	int ar[] = {10, 7, 8, 15, 5, 6, 11, 13, 12};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	rb_tree<int,int,KeyOfValue<int>, Compare<int>> rb;
+
+	for(int i=0; i<n; ++i)
+		rb.insert_unique(ar[i]);
+
+
+	auto it = rb.begin();
+	while(it != rb.end())
+	{
+		cout<<*it<<" ";
+		++it;
+	}
+	cout<<endl;
+}
+
+/*
+void main()
+{
+	deque<int> de; //Пе
+	de.push_front(-1);
+	for(int i=1; i<128; ++i)
+		de.push_back(i);
+	de.push_back(129);
+
+	deque<int>::iterator it = de.begin();
+	while(it != de.end())
+	{
+		cout<<*it<<" ";
+		++it;
+	}
+	cout<<endl;
 }
 
 /*

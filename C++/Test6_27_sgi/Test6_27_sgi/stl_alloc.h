@@ -1,5 +1,7 @@
 #pragma once
 
+#include"common.h"
+
 //“ªº∂ø’º‰≈‰÷√∆˜
 template<int inst>
 class __malloc_alloc_template
